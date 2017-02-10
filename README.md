@@ -43,3 +43,17 @@ react-native bundle --entry-file index.android.js --bundle-output ./bundle/index
 
 3.保证MainActivity.java中的 setBundleAssetName与你的jsbundle文件名一致，比如.setBundleAssetName(“index.android.jsbundle”)就与我生成的资源名一致
 
+
+
+
+配置签名，具体参照：http://reactnative.cn/docs/0.41/signed-apk-android.html#content
+1.在android 目录下，执行 gradlew assembleRelease，你就可以在android/app/build/outputs/apk/app-release.apk中找到你的应用包。
+
+2.之后执行 pushy uploadApk android/app/build/outputs/apk/app-release.apk，
+即可上传apk以供后续版本比对之用。随后你可以选择往应用市场发布这个版本，也可以先往设备上直接安装这个apk文件以进行测试。
+
+3. 你可以尝试修改一行代码(譬如将版本一修改为版本二)，然后生成新的热更新版本。
+执行 pushy bundle --platform android，根据提示输入相关信息，此时版本已经提交到update服务，
+但用户暂时看不到此更新，你需要先将特定的包版本绑定到此热更新版本上。
+
+4.注意，发布热更新必须是签名过的包，不能通过react-native run-android来启动，用户可以在执行第一步后，找到release包安装到手机。
